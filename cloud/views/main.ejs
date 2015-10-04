@@ -1,0 +1,35 @@
+<% include head %>
+<div id="spotify_details" style="display:none">
+  <h2>You're logged in with Spotify!</h2>
+  <ul>
+    <li>
+      <h3>Name</h3>
+      <p id="name"></p>
+    </li>
+    <li>
+      <h3>Id</h3>
+      <p id="id"></p>
+    </li>
+    <li>
+      <h3>Image</h3>
+      <img id="images" src="" />
+    </li>
+  </ul>
+</div>
+<script type="text/javascript">
+if (!Parse.User.current()) {
+  window.location.href='/';
+} else {
+  Parse.Cloud.run('getSpotifyData', {}).then(function(response) {
+      $('#name').text(response.display_name);
+      $('#id').text(response.id);
+      $("#images").attr("src",response.images[0].url);
+      $('#spotify_details').show();
+  }, function(error) {
+    alert('There was an error getting your Spotify details, ' +
+      'please check the console for more information.');
+    console.log(error);
+  });
+}
+</script>
+<% include foot %>
